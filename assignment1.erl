@@ -11,7 +11,12 @@
 -include_lib("eunit/include/eunit.hrl").
 
 %% NOTE: There are tests.  You should be able to run them just by
-%% evaluating "assignment1:test()".
+%% evaluating "assignment1:test()".  In the case of the various
+%% functions on shapes, because the numerical results might be
+%% floating-point numbers, the tests check that the functions compute
+%% results within some tolerance, hard-coded to 1%.  I don't do this
+%% for the bits/1 tests, however, since bits/1 should produce integral
+%% answers.
 
 %% Shapes
 
