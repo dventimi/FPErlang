@@ -118,7 +118,7 @@ enclose_test() ->
 
 dr_bits(0) -> 
     0;
-dr_bits(N) -> 
+dr_bits(N) when N> 0 -> 
     N rem 2 + dr_bits(N div 2).
 
 %% Tail-recursive definition supporting the bits/1 function
