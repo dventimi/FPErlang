@@ -56,35 +56,35 @@
 %% perimeter/1 definitions for circle, rectangle, and triangle
 
 perimeter({circle, {_X,_Y}, R}) when R>0 ->
-    math:pi()*2*R;
+    math:pi()*2*R;				%D = 2*pi*R
 perimeter({rectangle, {_X,_Y}, H, W}) when H>0, W>0 ->
-    2*H+2*W;
+    2*H+2*W;					%P = 2*height + 2*width
 perimeter({triangle, {_X,_Y}, S1, S2, S3}) when S1>0, S2>0, S3>0 ->
-    S1+S2+S3.
+    S1+S2+S3.					%P = sum of 3 sides
 
 %% area/1 definitions for circle, rectangle, and triangle using
 %% Heron's formula for the area of a triangle
 %% (https://en.wikipedia.org/wiki/Heron's_formula)
 
 area({circle, {_X,_Y}, R}) when R>0 ->
-    math:pi()*R*R;
+    math:pi()*R*R;				%A = 2*pi*R^2
 area({rectangle, {_X,_Y}, H, W}) when H>0, W>0 ->
-    H*W;
+    H*W;					%A = height*width
 area({triangle, {_X,_Y}, A, B, C}) when A>0, B>0, C>0->
     P = perimeter({triangle, {_X,_Y}, A, B, C})/2,
-    math:sqrt(P*(P-A)*(P-B)*(P-C)).
+    math:sqrt(P*(P-A)*(P-B)*(P-C)).		%Heron's formula
 
 %% enclose/1 definitions for circle, rectangle, and triangle
 
 enclose({circle, {X,Y}, R}) when R>0 ->
-    {rectangle, {X,Y}, 2*R, 2*R};
+    {rectangle, {X,Y}, 2*R, 2*R};		%Smallest enclosure is a square
 enclose({rectangle, {X,Y}, H, W}) ->
-    {rectangle, {X,Y}, H, W};
+    {rectangle, {X,Y}, H, W};			%Smallest enclosure is the same rect
 enclose({triangle, {X,Y}, S1, S2, S3}) ->
     B = lists:max([S1, S2, S3]),
     Area = area({triangle, {X,Y}, S1, S2, S3}),
     Height = 2*Area/B,
-    {rectangle, {X,Y}, Height, B}.
+    {rectangle, {X,Y}, Height, B}.		%Smallest enclosure given above NOTES
 
 %% Tests for the perimeter, area, and enclose functions
 
@@ -116,24 +116,24 @@ enclose_test() ->
 
 %% Direct-recursive definition supporting the bits/1 function
 
-dr_bits(0) -> 
-    0;
-dr_bits(N) when N>0 -> 
-    N rem 2 + dr_bits(N div 2).
+dr_bits(0) -> 					%Base-case
+    0;						%Yield 0
+dr_bits(N) when N>0 -> 				%Recursive-case
+    N rem 2 + dr_bits(N div 2).			%Get current bit, then recur
 
 %% Tail-recursive definition supporting the bits/1 function
 
-tr_bits(N, SUM) when N>0 ->
-    tr_bits(N div 2, SUM + N rem 2);
-tr_bits(_N, SUM) ->
-    SUM.
-tr_bits(N) ->
+tr_bits(N, SUM) when N>0 ->			%Iterate
+    tr_bits(N div 2, SUM + N rem 2);		%Accumulate in SUM
+tr_bits(_N, SUM) ->				%End iteration
+    SUM.					%Return the anser
+tr_bits(N) ->					%Plug tr_bits/1 into tr_bits/2
     tr_bits(N, 0).
 
 %% bits/1 definition that just calls the tail-recursive version
 
-bits(N) ->
-    tr_bits(N).
+bits(N) ->					%Trivial function
+    tr_bits(N).					%that plugs bits/1 into tr_bits/1
 
 %% Tests for the various versions of the bits function
 
