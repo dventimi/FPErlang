@@ -10,6 +10,9 @@
 	]).
 -include_lib("eunit/include/eunit.hrl").
 
+%% NOTE: There are tests.  You should be able to run them just by
+%% evaluating "assignment1:test()".
+
 %% Shapes
 
 %% NOTE I: The representation I chose for a triangle comprises an
