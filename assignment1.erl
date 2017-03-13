@@ -170,3 +170,5 @@ bits_test() ->
 %% worry.  Considering all of these factors, it is my opinion that the
 %% tail-recursive version of the bits/1 function is in some sense
 %% "better."
+
+%%  LocalWords:  dr eunit sqrt
