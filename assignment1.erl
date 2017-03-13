@@ -126,7 +126,7 @@ dr_bits(N) when N>0 -> 				%Recursive-case
 tr_bits(N, SUM) when N>0 ->			%Iterate
     tr_bits(N div 2, SUM + N rem 2);		%Accumulate in SUM
 tr_bits(_N, SUM) ->				%End iteration
-    SUM.					%Return the anser
+    SUM.					%Return the answer
 tr_bits(N) ->					%Plug tr_bits/1 into tr_bits/2
     tr_bits(N, 0).
 
