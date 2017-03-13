@@ -44,7 +44,9 @@
 %% "triangle" as there are several to consider: its centroid, its
 %% circumcenter, its orthocenter, its incenter, etc.  The
 %% relationships between these and, especially, the center of an
-%% enclosing rectangle, are not trivial
+%% enclosing rectangle, are not trivial.  Consequently, I decided to
+%% make life easy for myself by choosing favorable interpretations for
+%% the representations of the triangle and rectangle shapes.
 
 %% perimeter/1 definitions for circle, rectangle, and triangle
 
