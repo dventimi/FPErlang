@@ -16,8 +16,8 @@
 bits(0) -> 0; 
 %% bits(1) -> 1; 
 bits(N) -> bits(N, 0). 
-bits(N,R) when ((N > 0) and (N rem 2 == 1)) -> bits(N div 2, R+1); 
-bits(N,R) when ((N > 0) and (N rem 2 == 0)) -> bits(N div 2, R+0);
+bits(N,R) when N > 0 -> bits(N div 2, R+N rem 2); 
+%% bits(N,R) when N > 0, N rem 2 == 0 -> bits(N div 2, R+0);
 bits(1,R) -> R+1; 
 bits(0,R) -> R.
 
