@@ -12,9 +12,11 @@
 	 occurrences/1,
 	 occurrences/2,
 	 product/1,
+	 take/2,
 	 tr_max/2,
 	 tr_product/2
 	]).
+-include_lib("eunit/include/eunit.hrl").
 
 %% product
 
@@ -114,3 +116,18 @@ mode([X|Xs]) ->
     [{A,_NA}|_Os] = lists:sort(fun({_A,NA},{_B,NB})->
 				       NA>NB end, occurrences([X|Xs])),
     A.
+
+%% take
+
+take(0,[_X|_Xs]) ->
+    [];
+take(_,[]) ->
+    [];
+take(N,[X|Xs]) ->
+    [X|take(N-1,Xs)].
+
+take_test() ->
+    ?assert(take(0, "hello")==[]),
+    ?assert(take(4, "hello")=="hell"),
+    ?assert(take(5, "hello")=="hello"),
+    ?assert(take(9, "hello")=="hello").
