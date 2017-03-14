@@ -4,21 +4,12 @@
 	 dr_max/1,
 	 dr_product/1,
 	 evens/1,
-	 len/1,
 	 max/1,
 	 median/1,
 	 mode/1,
-	 nth/2,
-	 dedup/1,
-	 dedup/2,
 	 nub/1,
-	 occurrences/1,
-	 occurrences/2,
 	 product/1,
-	 take/2,
-	 tr_max/2,
-	 tr_product/2,
-	 untuple/1
+	 take/2
 	]).
 -include_lib("eunit/include/eunit.hrl").
 
@@ -42,7 +33,6 @@ tr_product([], P) ->
 tr_product([X|Xs], P) ->
     tr_product(Xs, X*P).
 
-
 %% max
 
 max(X) ->
@@ -62,7 +52,6 @@ tr_max([], M) ->
     M;
 tr_max([X|Xs], M) ->
     tr_max(Xs, max(X,M)).
-
 
 %% double
 
