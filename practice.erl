@@ -155,18 +155,11 @@ stripchars(Chars, List1) ->
     lists:filter(fun(X) ->
 			 not lists:member(X, Chars) end, List1).
 
-palindrome([]) ->
-    [];
-palindrome([X|Xs]) ->
-    S = string:to_upper(stripchars(" \'", [X|Xs])),
-    Size = len(S),
-    {Front,Back} = lists:split(Size div 2, string:to_upper(S)),
-    lists:reverse(Front)==case Size rem 2 of
-			      1 ->
-				  tl(Back);
-			      _else ->
-				  Back
-			  end.
-
 palindrome_test() ->
-    ?assert(practice:palindrome("madam i\'m adam")).
+    ?assert(practice:palindrome("Madam I\'m Adam")).
+
+palindrome([]) ->
+    true;
+palindrome(Xs) ->
+    S = string:to_upper(stripchars(" \'", Xs)),
+    S == lists:reverse(S).
