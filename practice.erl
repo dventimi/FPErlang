@@ -123,7 +123,7 @@ take(0,[_X|_Xs]) ->
     [];
 take(_,[]) ->
     [];
-take(N,[X|Xs]) ->
+take(N,[X|Xs]) when N>0 ->
     [X|take(N-1,Xs)].
 
 take_test() ->
