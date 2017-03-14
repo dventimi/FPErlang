@@ -9,12 +9,16 @@
 	 median/1,
 	 mode/1,
 	 nth/2,
+	 dedup/1,
+	 dedup/2,
+	 nub/1,
 	 occurrences/1,
 	 occurrences/2,
 	 product/1,
 	 take/2,
 	 tr_max/2,
-	 tr_product/2
+	 tr_product/2,
+	 untuple/1
 	]).
 -include_lib("eunit/include/eunit.hrl").
 
@@ -131,3 +135,24 @@ take_test() ->
     ?assert(take(4, "hello")=="hell"),
     ?assert(take(5, "hello")=="hello"),
     ?assert(take(9, "hello")=="hello").
+
+%% nub
+
+dedup([]) ->
+    [];
+dedup([X|Xs]) ->
+    dedup([X|Xs],[]).
+dedup([],L)->
+    L;
+dedup([X|Xs],L) ->
+    dedup(Xs, lists:keystore(X, 1, L, {X})).
+ 
+untuple([]) ->
+    [];
+untuple([{A}|Xs]) ->
+    [A|untuple(Xs)].
+
+nub([]) ->
+    [];
+nub([X|Xs]) ->
+    untuple(dedup([X|Xs])).
