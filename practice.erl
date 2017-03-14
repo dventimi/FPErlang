@@ -1,9 +1,12 @@
 -module(practice).
 -export([
+	 cat/1,
+	 concat/1,
 	 double/1,
 	 dr_max/1,
 	 dr_product/1,
 	 evens/1,
+	 join/2,
 	 len/1,
 	 max/1,
 	 median/1,
@@ -11,6 +14,8 @@
 	 nub/1,
 	 palindrome/1,
 	 product/1,
+	 reverse/1,
+	 shunt/2,
 	 stripchars/2,
 	 take/2
 	]).
@@ -163,3 +168,25 @@ palindrome([]) ->
 palindrome(Xs) ->
     S = string:to_upper(stripchars("., \'\"\t\n", Xs)),
     S == lists:reverse(S).
+
+%% join
+
+shunt([],Ys) ->
+    Ys;
+shunt([X|Xs],Ys) ->
+    shunt(Xs,[X|Ys]).
+
+reverse(Xs) ->
+    shunt(Xs,[]).
+
+cat(Xs) ->
+    shunt(shunt(Xs,[]),[]).
+
+join(Xs,Ys) ->
+    shunt(reverse(Xs),Ys).
+
+concat([]) ->
+    [];
+concat([X|Xs]) ->
+    join(X, concat(Xs)).
+
