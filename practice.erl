@@ -10,6 +10,7 @@
 	 len/1,
 	 max/1,
 	 median/1,
+	 member/2,
 	 mode/1,
 	 nub/1,
 	 palindrome/1,
@@ -185,8 +186,19 @@ cat(Xs) ->
 join(Xs,Ys) ->
     shunt(reverse(Xs),Ys).
 
+%% concat
+
 concat([]) ->
     [];
 concat([X|Xs]) ->
     join(X, concat(Xs)).
+
+%% member
+
+member(_X,[]) ->
+    false;
+member(X,[X|_Xs]) ->
+    true;
+member(Y,[_X|Xs]) ->
+    member(Y,Xs).
 
