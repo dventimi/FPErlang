@@ -161,5 +161,5 @@ palindrome_test() ->
 palindrome([]) ->
     true;
 palindrome(Xs) ->
-    S = string:to_upper(stripchars(" \'", Xs)),
+    S = string:to_upper(stripchars("., \'\t\n", Xs)),
     S == lists:reverse(S).
