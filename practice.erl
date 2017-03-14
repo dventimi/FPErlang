@@ -7,21 +7,29 @@
 	 len/1,
 	 max/1,
 	 median/1,
+	 mode/1,
 	 nth/2,
+	 occurrences/1,
+	 occurrences/2,
 	 product/1,
-	 sort/1,
 	 tr_max/2,
 	 tr_product/2
 	]).
+
+%% product
 
 product(X) ->
     %% dr_product(X).
     tr_product(X, 1).
 
+%% direct-recursive product
+
 dr_product([]) ->
     1;
 dr_product([X|Xs]) ->
     X*dr_product(Xs).
+
+%% tail-recursive product
 
 tr_product([], P) ->
     P;
@@ -29,14 +37,20 @@ tr_product([X|Xs], P) ->
     tr_product(Xs, X*P).
 
 
+%% max
+
 max(X) ->
     %% dr_max(X).
     tr_max(X,0).
+
+%% direct-recursive max
 
 dr_max([X]) ->
     X;
 dr_max([X|Xs]) ->
     max(X,dr_max(Xs)).
+
+%% tail-recursive max
 
 tr_max([], M) ->
     M;
@@ -44,10 +58,14 @@ tr_max([X|Xs], M) ->
     tr_max(Xs, max(X,M)).
 
 
+%% double
+
 double([]) ->
     [];
 double([X|Xs]) when X rem 1 == 0 ->
     [2*X|double(Xs)].
+
+%% evens
 
 evens([]) ->
     [];
@@ -55,6 +73,8 @@ evens([X|Xs]) when X rem 2 == 0 ->
     [X|evens(Xs)];
 evens([_X|Xs]) ->
     evens(Xs).
+
+%% median
 
 len([]) ->
     0;
@@ -66,19 +86,31 @@ nth(0,[X|_Xs]) ->
 nth(N,[_X|Xs]) ->
     nth(N-1,Xs).
 
-sort([]) ->
-    [];
-sort([X|[Y|Xs]]) when X>Y ->
-    sort([X,Y|Xs]);
-sort([X|[Y|Xs]]) ->
-    sort([Y,X|Xs]).
-
-median(X) ->
-    Size = len(X),
+median([X|Xs]) ->
+    L = lists:sort([X|Xs]),
+    Size = len(L),
     case Size rem 2 of
 	1 ->
-	    nth(Size div 2, X);
+	    nth(Size div 2, L);
 	_Else ->
-	    (nth(Size div 2 - 1, X) + nth(Size div 2, X))/2
+	    (nth(Size div 2 - 1, L) + nth(Size div 2, L))/2
     end.
-    
+
+%% mode
+
+occurrences(_N,[]) ->
+    0;
+occurrences(N,[X|Xs]) when N==X ->
+    1 + occurrences(N, Xs);
+occurrences(N,[_X|Xs]) ->
+    0 + occurrences(N, Xs).
+
+occurrences([]) ->
+    [];
+occurrences([X|Xs]) ->
+    [{X,occurrences(X,[X|Xs])}|occurrences(Xs)].
+
+mode([X|Xs]) ->
+    [{A,_NA}|_Os] = lists:sort(fun({_A,NA},{_B,NB})->
+				       NA>NB end, occurrences([X|Xs])),
+    A.
