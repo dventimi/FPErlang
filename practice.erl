@@ -15,8 +15,13 @@
 	 mode/1,
 	 nub/1,
 	 palindrome/1,
+	 partition/1,
+	 partition/2,
+	 pshunt/4,
 	 perms/1,
 	 product/1,
+	 quicksort/1,
+	 %% quicksort/2,
 	 reverse/1,
 	 shunt/2,
 	 stripchars/2,
@@ -210,13 +215,37 @@ mergesort([]) ->
     [];
 mergesort([X]) ->
     [X];
-mergesort([X,Y]) when X<Y ->
-    [X,Y];
-mergesort([X,Y]) ->
-    [Y,X];
 mergesort([X|Xs]) ->
     {Front,Back} = lists:split(len([X|Xs]) div 2, [X|Xs]),
     lists:merge(mergesort(Front), mergesort(Back)).
+
+%% quicksort([]) ->
+%%     [];
+%% quicksort([X]) ->
+%%     [X].
+%% quicksort([X|Xs],P) when X<P ->
+%%     quicksort(Xs, 
+
+pshunt([],Ys,Zs,_P) ->
+    {Ys,Zs};
+pshunt([X|Xs],Ys,Zs,P) when X<P ->
+    pshunt(Xs,[X|Ys],Zs,P);
+pshunt([X|Xs],Ys,Zs,P) ->
+    pshunt(Xs,Ys,[X|Zs],P).
+
+partition(Xs,P) ->    
+    pshunt(Xs,[],[],P).
+    
+partition([X|Xs]) ->
+    partition([X|Xs],X).
+
+quicksort([]) ->
+    [];
+quicksort([X]) ->
+    [X];
+quicksort([X|Xs]) ->
+    {Left,Right} = partition([X|Xs]),
+    quicksort(Left)++quicksort(Right).
 
 %% permutations
 
