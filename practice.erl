@@ -264,7 +264,5 @@ insert(Y, [X|Xs]) ->
 
 %% permutations
 
-perms([]) ->
-    [[]];
-perms([X|Xs]) ->
-    [[X|Xs]|perms(Xs)].
+perms([]) -> [[]];
+perms(L)  -> [[H|T] || H <- L, T <- perms(L--[H])].
