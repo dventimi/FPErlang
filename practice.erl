@@ -10,10 +10,12 @@
 	 len/1,
 	 max/1,
 	 median/1,
+	 mergesort/1,
 	 member/2,
 	 mode/1,
 	 nub/1,
 	 palindrome/1,
+	 perms/1,
 	 product/1,
 	 reverse/1,
 	 shunt/2,
@@ -202,3 +204,23 @@ member(X,[X|_Xs]) ->
 member(Y,[_X|Xs]) ->
     member(Y,Xs).
 
+%% sorting
+
+mergesort([]) ->
+    [];
+mergesort([X]) ->
+    [X];
+mergesort([X,Y]) when X<Y ->
+    [X,Y];
+mergesort([X,Y]) ->
+    [Y,X];
+mergesort([X|Xs]) ->
+    {Front,Back} = lists:split(len([X|Xs]) div 2, [X|Xs]),
+    lists:merge(mergesort(Front), mergesort(Back)).
+
+%% permutations
+
+perms([]) ->
+    [[]];
+perms([X|Xs]) ->
+    [[X|Xs]|perms(Xs)].
