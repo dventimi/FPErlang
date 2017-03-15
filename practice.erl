@@ -6,22 +6,23 @@
 	 dr_max/1,
 	 dr_product/1,
 	 evens/1,
+	 insert/2,
+	 insertionsort/1,
 	 join/2,
 	 len/1,
 	 max/1,
 	 median/1,
-	 mergesort/1,
 	 member/2,
+	 mergesort/1,
 	 mode/1,
 	 nub/1,
 	 palindrome/1,
 	 partition/1,
 	 partition/2,
-	 pshunt/4,
 	 perms/1,
 	 product/1,
+	 pshunt/4,
 	 quicksort/1,
-	 %% quicksort/2,
 	 reverse/1,
 	 shunt/2,
 	 stripchars/2,
@@ -246,6 +247,20 @@ quicksort([X]) ->
 quicksort([X|Xs]) ->
     {Left,Right} = partition([X|Xs]),
     quicksort(Left)++quicksort(Right).
+
+insertionsort([]) ->
+    [];
+insertionsort([X]) ->
+    [X];
+insertionsort([X|Xs]) ->
+    insert(X, insertionsort(Xs)).
+
+insert(Y, []) ->
+    [Y];
+insert(Y, [X|Xs]) when Y<X ->
+    [Y,X|Xs];
+insert(Y, [X|Xs]) ->
+    [X|insert(Y,Xs)].
 
 %% permutations
 
