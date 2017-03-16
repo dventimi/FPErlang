@@ -302,15 +302,39 @@ flatten_index_test() ->
 		 {"The",[15,17]},
 		 {"Liberty",[2]}]).
 
+%% Encode a list of Integers--sorted in ascending order, and with or
+%% withot duplicates--using a variation of Run-Length Encoding (RLE).
+%% See: https://en.wikipedia.org/wiki/Run-length_encoding.  Instead of
+%% generating a run of identical numbers (which would comprise the
+%% number and the length of the run), partition the list into
+%% intervals that encompass runs wherein adjacent integers differ by
+%% either 0 or 1.  The output is a TupleList in which each Tuple is an
+%% ordered-pair corresponding to a closed interval.
 encode(List) ->
     lists:reverse(
       lists:foldl(
-	fun(Current,[{BaseValue,Previous}|Acc]) when Current==Previous+1 ->
+	fun(Current,[{BaseValue,Previous}|Acc]) when (Current-Previous)=<1 ->
 		[{BaseValue,Current}|Acc];
 	   (Current,Acc) ->
 		[{Current,Current}|Acc]
 	end, [], List)).
 
+%% Test the encode function in a handful of cases.
+encode_test() ->
+    ?assert(encode([1,1,2,3,4,5,10,11,12])==[{1,5},{10,12}]),
+    ?assert(encode([1,2,3,4,5,10,11,12])==[{1,5},{10,12}]),
+    ?assert(encode([1,2,3,4,5,6,7,8,9,10,11,12])==[{1,12}]).
+
+%% Index a text file, by line number. This the main function.  The
+%% output of the main function should be a list of entries consisting
+%% of a word and a list of the ranges of lines on which it occurs.
+%% 
+%% For example, the entry
+%% 
+%% { "foo" , [{3,5},{7,7},{11,13}] }
+%% 
+%% means that the word "foo" occurs on lines 3, 4, 5, 7, 11, 12 and 13
+%% in the file.
 index(FileName) ->
     lists:map(
       fun({Word,Index}) ->
