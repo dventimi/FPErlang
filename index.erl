@@ -341,5 +341,24 @@ index(FileName) ->
 	      {Word,encode(Index)}
       end, flatten_index(index_words(FileName))).
 
+%% TODO: Indexing a file.
 
+%% TODO: Removing all short words (e.g. words of length less than 3)
+%% or all common words (you‘ll have to think about how to define
+%% these).
 
+%% TODO: Sorting the output so that the words occur in lexicographic
+%% order.
+
+%% TODO: Normalising the words so that capitalised ("Foo") and non
+%% capitalised versions ("foo") of a word are identified.
+
+%% TODO: Normalising so that common endings, plurals etc. identified.
+
+%% TODO: (Harder) Thinking how you could make the data representation
+%% more efficient than the one you first chose. This might be
+%% efficient for lookup only, or for both creation and lookup.
+
+%% TODO: Can you think of other ways that you might extend your
+%% solution?
+ 
