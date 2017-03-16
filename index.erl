@@ -341,13 +341,13 @@ index(FileName) ->
 	      {Word,encode(Index)}
       end, flatten_index(index_words(FileName))).
 
-%% TODO: Indexing a file.
+%% DONE: Indexing a file.
 
 %% TODO: Removing all short words (e.g. words of length less than 3)
 %% or all common words (you‘ll have to think about how to define
 %% these).
 
-%% TODO: Sorting the output so that the words occur in lexicographic
+%% DONE: Sorting the output so that the words occur in lexicographic
 %% order.
 
 %% TODO: Normalising the words so that capitalised ("Foo") and non
