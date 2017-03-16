@@ -239,12 +239,68 @@ index_words_test()->
 		 {"and",1},
 		 {"and",3}]).
 
+%% Flatten a word index list Index, which may contain duplicates of
+%% the same word on different lines or even on the same line.  The
+%% input Index is a lexicographically-sorted TupleList in which each
+%% Tuple associates a single word with a single line number.  The
+%% flattened output is another TupleList in which each Tuple
+%% associates a word with a list of line numbers.  Note that while
+%% words may be duplicated in the input TupleList Index, words will
+%% not be duplicated in the output TupleList.
 flatten_index(Index) ->
     dict:to_list(
       lists:foldl(
 	fun({Word,LineNumber},OldDict)->
 		dict:append(Word, LineNumber, OldDict) 
 	end, dict:new(), Index)).
+
+%% Test flatten_index on an input word index list, in which words may
+%% be duplicated, and validate that it generates the correct flattened
+%% output index list.
+flatten_index_test() ->
+    ?assert(flatten_index([{"But",13},
+			   {"Four",1},
+			   {"God",26},
+			   {"It",10},
+			   {"It",18},
+			   {"It",21},
+			   {"Liberty",2},
+			   {"Now",5},
+			   {"The",15},
+			   {"The",17},
+			   {"We",7},
+			   {"We",8},
+			   {"a",2},
+			   {"a",5},
+			   {"a",7},
+			   {"a",8},
+			   {"a",8},
+			   {"a",13},
+			   {"a",26},
+			   {"above",16},
+			   {"add",16},
+			   {"advanced",20},
+			   {"ago",1},
+			   {"all",3},
+			   {"altogether",10},
+			   {"and",1},
+			   {"and",3}])==
+		[{"It",[10,18,21]},
+		 {"God",[26]},
+		 {"ago",[1]},
+		 {"Now",[5]},
+		 {"all",[3]},
+		 {"add",[16]},
+		 {"advanced",[20]},
+		 {"and",[1,3]},
+		 {"But","\r"},
+		 {"above",[16]},
+		 {"altogether","\n"},
+		 {"We",[7,8]},
+		 {"Four",[1]},
+		 {"a",[2,5,7,8,8,13,26]},
+		 {"The",[15,17]},
+		 {"Liberty",[2]}]).
 
 encode(List) ->
     lists:reverse(
@@ -260,4 +316,6 @@ index(FileName) ->
       fun({Word,Index}) ->
 	      {Word,encode(Index)}
       end, flatten_index(index_words(FileName))).
+
+
 
