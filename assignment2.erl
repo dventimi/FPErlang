@@ -37,7 +37,7 @@
 %%   [{"cat",5}, {"cat",6}, {"cat",7}, {"cat",10}] -> [{"cat",[5,6,7,10]}]
 %% 
 %% 7. "Encode" those merged Tuples using a variation on Run-Length
-%% Encoding in order to generate inclusive ranges of line-numbers.
+%% Encoding in order to generate inclusive ranges of LineNumbers.
 %% For example:
 %% 
 %%   [{"cat",[5,6,7,10]}] -> [{"cat",[{5,7},{10,10}]}]
@@ -140,7 +140,7 @@ word_scatter({String, Value}) ->
 %% Value across the Words.  The result is another TupleList in which
 %% each Tuple associates a Word with a Value.  If, as in the example,
 %% the words are from enumerated lines of text this has the effect of
-%% generating a list of {word, line-number} pairs.  Naturally, words
+%% generating a list of {Word,LineNumber} pairs.  Naturally, words
 %% may be duplicated, since the same word may appear in any number of
 %% lines.
 index_enumerated_lines(List) ->
@@ -152,7 +152,7 @@ index_enumerated_lines(List) ->
 %% Test index_enumerated_lines on a List of the first 3 lines of text
 %% taken from The Gettysburg Address, and validate that it generates
 %% the appropriate indext word list, in which each word is associated
-%% with a copy of the line-number in which it appears (words may
+%% with a copy of the LineNumber in which it appears (words may
 %% appear multiple times on different line numbers.)
 index_enumerated_lines_test() ->
     ?assert(
@@ -192,10 +192,10 @@ index_enumerated_lines_test() ->
 
 %% Index the words in a file named by Filename.  That is, generate a
 %% TupleList in which each Tuple associates a word from the file with
-%% the line-number on which it appears.  The list is sorted
+%% the LineNumber on which it appears.  The list is sorted
 %% lexicographically by the word.  Moreover, since words are common
 %% and any given word may appear in many places throughout a text,
-%% even on the same line, words and even {word,line-number} pairs may
+%% even on the same line, words and even {Word,LineNumber} pairs may
 %% be duplicated.  This function makes no attempt to cope with
 %% duplicates.  Note that this is a higher-level function.  I.e., it
 %% brings together functionality from a variety of functions.  That
@@ -218,7 +218,7 @@ index_words(FileName) ->
 				index:get_file_contents(FileName)))))).
 
 %% Test index_words on the file "gettysburg-address.txt" and validate
-%% that it generates the correct {word,line-number} index list.
+%% that it generates the correct {Word,LineNumber} index list.
 index_words_test()->
     ?assert(practice:take(27, index_words("gettysburg-address.txt"))==
 		[{"a",2},
@@ -429,6 +429,9 @@ index_test() ->
 		 {"brought",[{1,1}]},
 		 {"world",[{17,17}]}]).
 
+%% I did these tasks:
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% DONE: Indexing a file.
 
 %% DONE: Removing all short words (e.g. words of length less than 3)
@@ -440,6 +443,9 @@ index_test() ->
 
 %% DONE: Normalising the words so that capitalised ("Foo") and non
 %% capitalised versions ("foo") of a word are identified.
+
+%% I am not going to do these tasks:
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% TODO: Normalising so that common endings, plurals etc. identified.
 
