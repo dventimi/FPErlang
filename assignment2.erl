@@ -74,7 +74,9 @@ enumerate(List) ->
 
 %% Test enumerate on a List of lines obtained from a text file.
 %% Verify that the first line is mapped to 1 and the second line is
-%% mapped to 2.
+%% mapped to 2.  NOTE: we use the take/2 function defined in the
+%% practice module just to make life a little easy on ourselves, since
+%% the test files actually contain a lot of data.
 enumerate_test() ->
     ?assert(
        practice:take(2, 
