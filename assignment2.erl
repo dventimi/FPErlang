@@ -1,3 +1,55 @@
+%% FutureLearn:  Functional Programming in Erlang
+%% 
+%% Assignment 2
+%% 
+%% Objective: The aim of this exercise is to index a text file, by
+%% line number.
+%% 
+%% Strategy: The approach is to build up from smaller and more general
+%% functions to larger and more specific functions.  Roughly, the
+%% steps are these.
+%% 
+%% 1. Get lines of text from a text file (this is handled already by
+%% the provided get_file_contents function).
+%% 
+%% 2. "Enumerate" the line numbers by associating each line of text
+%% with the line number on which it appears in the file (starting at 1).
+%% 
+%% 3. For each line, split it into words and "scatter" the line number
+%% across all of those words, generating a list of {Word,LineNumber}
+%% tuples.  All the lines of the file therefore will produce a List of
+%% Lists.
+%% 
+%% 4. Join that List of Lists (of Tuples) into one giant List (of
+%% Tuples).
+%% 
+%% 5. Sort that giant TupleList lexicographically according to the
+%% first element of each Tuple, which of course is the word.  This
+%% brings identical words together so that they're adjacent in the
+%% list.
+%% 
+%% 6. "Flatten" that giant TupleList (which may contain duplicate
+%% words) to a smaller TupleList by "combining" duplicates.  The
+%% combining operation for Tuples whose Word elements are the same is
+%% to merge their corresponding LineNumber elements into a list of
+%% LineNumbers.  For example:
+%% 
+%%   [{"cat",5}, {"cat",6}, {"cat",7}, {"cat",10}] -> [{"cat",[5,6,7,10]}]
+%% 
+%% 7. "Encode" those merged Tuples using a variation on Run-Length
+%% Encoding in order to generate inclusive ranges of line-numbers.
+%% For example:
+%% 
+%%   [{"cat",[5,6,7,10]}] -> [{"cat",[{5,7},{10,10}]}]
+%% 
+%% 8. Along the way, add in some additional features:
+%% 
+%%    a. filter out "short" words
+%%    b. filter out certain "common" words
+%%    c. normalize to lower-case so that "God" and "god" are treated as just "god"
+%%    d. do some light unit testing
+%% 
+
 -module(assignment2).
 -export([
 	 assign_value/2,
