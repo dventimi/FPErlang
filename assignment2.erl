@@ -7,28 +7,10 @@
 	 index/1,
 	 index_enumerated_lines/1,
 	 index_words/1,
-	 take/2,
 	 word_scatter/1,
 	 words/1
 	]).
 -include_lib("eunit/include/eunit.hrl").
-
-%% take
-
-take(0,[_X|_Xs]) ->
-    [];
-take(_,[]) ->
-    [];
-take(N,[X|Xs]) when N>0 ->
-    [X|take(N-1,Xs)].
-
-take_test() ->
-    ?assert(take(0, "hello")==[]),
-    ?assert(take(4, "hello")=="hell"),
-    ?assert(take(5, "hello")=="hello"),
-    ?assert(take(9, "hello")=="hello").
-
-%% Main functions
 
 %% Enumerate the elements of List sequentially and generate a
 %% TupleList, in which each Tuple maps an element E to its ordinal
@@ -41,10 +23,10 @@ enumerate(List) ->
 %% mapped to 2.
 enumerate_test() ->
     ?assert(
-       take(2, 
-	    enumerate(
-	      index:get_file_contents(
-		"gettysburg-address.txt")))==
+       practice:take(2, 
+		     enumerate(
+		       index:get_file_contents(
+			 "gettysburg-address.txt")))==
 	   [{"Four score and seven years ago our fathers brought",1},
 	    {"forth on this continent, a new nation, conceived in Liberty,", 2}]).
 
@@ -121,7 +103,7 @@ index_enumerated_lines(List) ->
 %% appear multiple times on different line numbers.)
 index_enumerated_lines_test() ->
     ?assert(
-       take(
+       practice:take(
 	 27, 
 	 index_enumerated_lines(
 	   [{"Four score and seven years ago our fathers brought", 1},
@@ -177,7 +159,7 @@ index_words(FileName) ->
 %% Test index_words on the file "gettysburg-address.txt" and validate
 %% that it generates the correct {word,line-number} index list.
 index_words_test()->
-    ?assert(take(27, index_words("gettysburg-address.txt"))==
+    ?assert(practice:take(27, index_words("gettysburg-address.txt"))==
 		[{"But",13},
 		 {"Four",1},
 		 {"God",26},
