@@ -41,7 +41,6 @@ words_test() ->
     ?assert(words("The quick brown fox jumped over the lazy dogs.")==
 		["The","quick","brown","fox","jumped","over","the","lazy", "dogs"]).
 
-
 %% Given a List and a Value, generate a TupleList in which each List
 %% element is associated with a copy of the Value.
 assign_value(List,Value) ->
@@ -73,13 +72,11 @@ assign_value_test() ->
 		 {"lazy",1}, 
 		 {"dogs",1}]).
 
-
 %% Given a String that represents 0 or more words and a Value (perhaps
 %% a line number), split the String into a List of words and scatter
 %% the Value across all of the words in the List.
 word_scatter({String, Value}) ->
     assign_value(words(String), Value).
-
 
 %% Given a TupleList in which each Tuple associates a String with a
 %% Value (e.g., a line of text with its corresponding line number),
@@ -310,6 +307,3 @@ index(FileName) ->
 
 %% TODO: Can you think of other ways that you might extend your
 %% solution?
- 
-
-
