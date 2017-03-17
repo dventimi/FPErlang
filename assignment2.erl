@@ -7,6 +7,8 @@
 	 index/1,
 	 index_enumerated_lines/1,
 	 index_words/1,
+	 common_word/1,
+	 short_word/1,
 	 word_scatter/1,
 	 words/1
 	]).
@@ -141,35 +143,31 @@ index_enumerated_lines_test() ->
 %% and any given word may appear in many places throughout a text,
 %% even on the same line, words and even {word,line-number} pairs may
 %% be duplicated.  This function makes no attempt to cope with
-%% duplicates.
+%% duplicates.  Note that this is a higher-level function.  I.e., it
+%% brings together functionality from a variety of functions.  That
+%% means its behavior is more specific and less general.  There's a
+%% trade-off between those two, with this favoring specificity over
+%% generality.  Consequently, it's composability with other functions
+%% is diminished.
 index_words(FileName) ->
     lists:sort(
       fun({Word1,_},{Word2,_}) ->
 	      Word1=<Word2 
-      end, index_enumerated_lines(
-	     lists:filter(
-	       fun({Word,_}) -> 
-		       length(Word)>0 
-	       end, enumerate(
-		      index:get_file_contents(FileName))))).
+      end, 
+      lists:map(fun({Word,LineNumber}) ->
+			{string:to_lower(Word), LineNumber}  %Normalize to lowercase.
+		end, index_enumerated_lines(
+		       lists:filter(
+			 fun({Line,_}) -> 			     
+				 length(Line)>0		     %Kill empty lines.
+			 end, enumerate(
+				index:get_file_contents(FileName)))))).
 
 %% Test index_words on the file "gettysburg-address.txt" and validate
 %% that it generates the correct {word,line-number} index list.
 index_words_test()->
     ?assert(practice:take(27, index_words("gettysburg-address.txt"))==
-		[{"But",13},
-		 {"Four",1},
-		 {"God",26},
-		 {"It",10},
-		 {"It",18},
-		 {"It",21},
-		 {"Liberty",2},
-		 {"Now",5},
-		 {"The",15},
-		 {"The",17},
-		 {"We",7},
-		 {"We",8},
-		 {"a",2},
+		[{"a",2},
 		 {"a",5},
 		 {"a",7},
 		 {"a",8},
@@ -183,7 +181,19 @@ index_words_test()->
 		 {"all",3},
 		 {"altogether",10},
 		 {"and",1},
-		 {"and",3}]).
+		 {"and",3},
+		 {"and",6},
+		 {"and",10},
+		 {"and",15},
+		 {"and",27},
+		 {"any",6},
+		 {"are",3},
+		 {"are",5},
+		 {"are",7},
+		 {"as",8},
+		 {"battle",7},
+		 {"be",19},
+		 {"be",21}]).
 
 %% Flatten a word index list Index, which may contain duplicates of
 %% the same word on different lines or even on the same line.  The
@@ -271,6 +281,53 @@ encode_test() ->
     ?assert(encode([1,2,3,4,5,10,11,12])==[{1,5},{10,12}]),
     ?assert(encode([1,2,3,4,5,6,7,8,9,10,11,12])==[{1,12}]).
 
+
+
+%% Filter out words from List when their length is less than 3.
+short_word(Word) ->
+    length(Word)<3.
+
+
+%% Test kill_short_words function on a common phrase.
+short_word_test() ->
+    ?assert(
+       lists:filter(fun(Word) -> not short_word(Word) end,
+	 words(
+	   "Now is the time for all good men to come to the aid of their country."))==
+	   ["Now",
+	    "the",
+	    "time",
+	    "for",
+	    "all",
+	    "good",
+	    "men",
+	    "come",
+	    "the",
+	    "aid",
+	    "their",
+	    "country"]).
+
+%% Identify common words
+common_word(Word) ->
+    lists:member(Word, 
+		 words("is to of the a an for from in on but and")).
+
+%% Test the kill_common_words function on a common phrase.
+common_words_test() ->
+    ?assert(
+       lists:filter(fun(Word) -> not common_word(Word) end,
+	 words(
+	   "Now is the time for all good men to come to the aid of their country."))==
+	   ["Now",
+	    "time",
+	    "all",
+	    "good",
+	    "men",
+	    "come",
+	    "aid",
+	    "their",
+	    "country"]).
+
 %% Index a text file, by line number. This the main function.  The
 %% output of the main function should be a list of entries consisting
 %% of a word and a list of the ranges of lines on which it occurs.
@@ -282,49 +339,52 @@ encode_test() ->
 %% means that the word "foo" occurs on lines 3, 4, 5, 7, 11, 12 and 13
 %% in the file.
 index(FileName) ->
-    lists:map(
-      fun({Word,Index}) ->
-	      {Word,encode(Index)}
-      end, flatten_index(index_words(FileName))).
+    lists:filter(fun({Word,_}) ->
+			 not common_word(Word) and not short_word(Word)
+		 end,
+		 lists:map(
+		   fun({Word,Index}) ->
+			   {Word,encode(Index)}
+		   end, flatten_index(index_words(FileName)))).
 
 %% Test the main function index on the text of The Gettysburg Address.
 index_test() ->
     ?assert(practice:take(24, index("gettysburg-address.txt"))==
 		[{"say",[{17,17}]},
 		 {"larger",[{13,13}]},
-		 {"it",[{16,16},{18,18}]},
 		 {"fought",[{20,20}]},
-		 {"It",[{10,10},{18,18},{21,21}]},
 		 {"war",[{5,5},{7,7}]},
 		 {"they",[{18,18},{20,20},{23,23}]},
 		 {"measure",[{24,24}]},
-		 {"God",[{26,26}]},
-		 {"in",[{2,2},{5,5},{13,13},{25,25}]},
+		 {"god",[{26,26}]},
 		 {"hallow",[{14,14}]},
 		 {"ground",[{14,14}]},
 		 {"forget",[{18,18}]},
-		 {"for",[{9,9},{18,18},{21,21},{23,23},{28,28}]},
 		 {"ago",[{1,1}]},
 		 {"years",[{1,1}]},
 		 {"last",[{24,24}]},
-		 {"from",[{22,22},{28,28}]},
 		 {"battle",[{7,7}]},
-		 {"as",[{8,8}]},
 		 {"that",[{3,3},{6,11},{22,27}]},
-		 {"or",[{6,6},{16,16}]},
 		 {"did",[{18,18}]},
-		 {"all",[{3,3}]}]).
+		 {"all",[{3,3}]},
+		 {"vain",[{25,25}]},
+		 {"under",[{26,26}]},
+		 {"proposition",[{3,3}]},
+		 {"advanced",[{20,20}]},
+		 {"lives",[{9,9}]},
+		 {"brought",[{1,1}]},
+		 {"world",[{17,17}]}]).
 
 %% DONE: Indexing a file.
 
-%% TODO: Removing all short words (e.g. words of length less than 3)
+%% DONE: Removing all short words (e.g. words of length less than 3)
 %% or all common words (you‘ll have to think about how to define
 %% these).
 
 %% DONE: Sorting the output so that the words occur in lexicographic
 %% order.
 
-%% TODO: Normalising the words so that capitalised ("Foo") and non
+%% DONE: Normalising the words so that capitalised ("Foo") and non
 %% capitalised versions ("foo") of a word are identified.
 
 %% TODO: Normalising so that common endings, plurals etc. identified.
