@@ -287,6 +287,34 @@ index(FileName) ->
 	      {Word,encode(Index)}
       end, flatten_index(index_words(FileName))).
 
+%% Test the main function index on the text of The Gettysburg Address.
+index_test() ->
+    ?assert(practice:take(24, index("gettysburg-address.txt"))==
+		[{"say",[{17,17}]},
+		 {"larger",[{13,13}]},
+		 {"it",[{16,16},{18,18}]},
+		 {"fought",[{20,20}]},
+		 {"It",[{10,10},{18,18},{21,21}]},
+		 {"war",[{5,5},{7,7}]},
+		 {"they",[{18,18},{20,20},{23,23}]},
+		 {"measure",[{24,24}]},
+		 {"God",[{26,26}]},
+		 {"in",[{2,2},{5,5},{13,13},{25,25}]},
+		 {"hallow",[{14,14}]},
+		 {"ground",[{14,14}]},
+		 {"forget",[{18,18}]},
+		 {"for",[{9,9},{18,18},{21,21},{23,23},{28,28}]},
+		 {"ago",[{1,1}]},
+		 {"years",[{1,1}]},
+		 {"last",[{24,24}]},
+		 {"from",[{22,22},{28,28}]},
+		 {"battle",[{7,7}]},
+		 {"as",[{8,8}]},
+		 {"that",[{3,3},{6,11},{22,27}]},
+		 {"or",[{6,6},{16,16}]},
+		 {"did",[{18,18}]},
+		 {"all",[{3,3}]}]).
+
 %% DONE: Indexing a file.
 
 %% TODO: Removing all short words (e.g. words of length less than 3)
