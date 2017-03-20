@@ -27,7 +27,10 @@
 	 reverse/1,
 	 shunt/2,
 	 stripchars/2,
-	 take/2
+	 take/2,
+	 zip/2,
+	 zip/3,
+	 zip_with/3
 	]).
 -include_lib("eunit/include/eunit.hrl").
 
@@ -285,3 +288,47 @@ product(List) ->
     lists:foldr(fun(X,Y) ->
 			X*Y end, 1, List).
 			   
+%% Zipping
+
+%% a) Define a function zip/2 that “zips together” pairs of elements
+%% from two lists like this:
+
+%% zip([1,3,5,7], [2,4]) = [ {1,2}, {3,4} ]
+
+%% where you can see that the elements from the longer list are lost.
+
+%% zip([X|Xs], [Y|Ys]) ->
+%%     [{X,Y}|zip(Xs,Ys)];
+%% zip([],[_Y|_Ys]) ->
+%%     [];
+%% zip([_X|_Xs],[]) ->
+%%     [];
+%% zip([],[]) ->
+%%     [].
+
+zip([X|Xs], [Y|Ys], [Z|Zs]) ->
+    [{X,Y,Z}|zip(Xs,Ys,Zs)];
+zip(_,_,_) ->
+    [].
+
+%% b) Define a function zip_with/3 that “zips together” pairs of
+%% elements from two lists using the function in the first argument,
+%% like this:
+
+%% zip_with(fun(X,Y) -> X+Y end, [1,3,5,7], [2,4]) = [ 3, 7 ]
+
+zip_with(F,[X|Xs],[Y|Ys]) ->
+    [F(X,Y)|zip_with(F,Xs,Ys)];
+zip_with(_,_,_) ->
+    [].
+
+%% c) Re-define the function zip_with/3 using zip and lists:map.
+
+%% zip_with(F,List1,List2) ->
+%%     lists:map(fun({X,Y}) -> F(X,Y) end, zip(List1,List2)).
+
+%% d) Re-define zip/2 using zip_with/3.
+
+zip(List1,List2) ->
+    zip_with(fun(X,Y) ->
+		     {X,Y} end, List1, List2).
