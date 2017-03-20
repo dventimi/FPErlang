@@ -3,6 +3,7 @@
 	 cat/1,
 	 concat/1,
 	 double/1,
+	 doubleAll/1,
 	 dr_max/1,
 	 dr_product/1,
 	 evens/1,
@@ -32,9 +33,9 @@
 
 %% product
 
-product(X) ->
-    %% dr_product(X).
-    tr_product(X, 1).
+%% product(X) ->
+%%     %% dr_product(X).
+%%     tr_product(X, 1).
 
 %% direct-recursive product
 
@@ -79,12 +80,12 @@ double([X|Xs]) when X rem 1 == 0 ->
 
 %% evens
 
-evens([]) ->
-    [];
-evens([X|Xs]) when X rem 2 == 0 ->
-    [X|evens(Xs)];
-evens([_X|Xs]) ->
-    evens(Xs).
+%% evens([]) ->
+%%     [];
+%% evens([X|Xs]) when X rem 2 == 0 ->
+%%     [X|evens(Xs)];
+%% evens([_X|Xs]) ->
+%%     evens(Xs).
 
 %% median
 
@@ -266,3 +267,21 @@ insert(Y, [X|Xs]) ->
 
 perms([]) -> [[]];
 perms(L)  -> [[H|T] || H <- L, T <- perms(L--[H])].
+
+%% Using higher-order functions
+
+%% Define the functions doubleAll, evens, and product using the
+%% higher-order functions lists:map, lists:filter and lists:foldr.
+
+doubleAll(List) ->
+    lists:map(fun(X) ->
+		      2*X end, List).
+
+evens(List) ->
+    lists:filter(fun(X) ->
+			 X rem 2 == 0 end, List).
+
+product(List) ->
+    lists:foldr(fun(X,Y) ->
+			X*Y end, 1, List).
+			   
