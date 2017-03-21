@@ -7,18 +7,18 @@
 	]).
 -include_lib("eunit/include/eunit.hrl").
 
-beat(Move) when Move==rock->
+beat(rock) ->
     paper;
-beat(Move) when Move==paper->
+beat(paper) ->
     scissors;
-beat(Move) when Move==scissors->
+beat(scissors) ->
     rock.
 
-lose(Move) when Move==rock->
+lose(rock) ->
     scissors;
-lose(Move) when Move==paper->
+lose(paper) ->
     rock;
-lose(Move) when Move==scissors->
+lose(scissors) ->
     paper.
 
 result(First,Second) when First==Second ->

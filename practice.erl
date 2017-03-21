@@ -26,6 +26,7 @@
 	 quicksort/1,
 	 reverse/1,
 	 shunt/2,
+	 my_nth/2,
 	 stripchars/2,
 	 take/2,
 	 zip/2,
@@ -332,3 +333,10 @@ zip_with(_,_,_) ->
 zip(List1,List2) ->
     zip_with(fun(X,Y) ->
 		     {X,Y} end, List1, List2).
+
+my_nth(0,[X|_]) -> X;
+my_nth(N,[_|Xs]) -> nth(N-1,Xs).
+
+%% my_nth(N,[_|Xs]) -> nth(N-1,Xs);
+%% my_nth(0,[X|_]) -> X.
+
