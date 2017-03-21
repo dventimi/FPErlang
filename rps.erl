@@ -1,5 +1,18 @@
 -module(rps).
--export([play/1,echo/1,play_two/3,rock/1,no_repeat/1,const/1,enum/1,cycle/1,rand/1,val/1,tournament/2]).
+-export([
+	 play/1,
+	 beats/1,
+	 echo/1,
+	 play_two/3,
+	 rock/1,
+	 no_repeat/1,
+	 const/1,
+	 enum/1,
+	 cycle/1,
+	 rand/1,
+	 val/1,
+	 tournament/2
+	]).
 
 
 %
@@ -16,10 +29,12 @@ play_two(StrategyL,StrategyR,N) ->
 % REPLACE THE dummy DEFINITIONS
 
 play_two(_,_,PlaysL,PlaysR,0) ->
-   dummy;
-
+    io:format("Overall result: ~p~n", [tournament(PlaysL,PlaysR)]);
 play_two(StrategyL,StrategyR,PlaysL,PlaysR,N) ->
-   dummy.
+    Left = StrategyL(PlaysR),
+    Right = StrategyR(PlaysL),
+    io:format("Result: ~p~n", [result(Left,Right)]),
+    play_two(StrategyL,StrategyR,[Left|PlaysL],[Right|PlaysR],N-1).
 
 %
 % interactively play against a strategy, provided as argument.
@@ -115,21 +130,19 @@ echo([Last|_]) ->
 rock(_) ->
     rock.
 
-
-
 % FOR YOU TO DEFINE
 % REPLACE THE dummy DEFINITIONS
 
 no_repeat([]) ->
-    dummy;
+    paper;
 no_repeat([X|_]) ->
-    dummy.
+    (val(X)+random:uniform(2)) rem 3.
 
 const(Play) ->
-    dummy.
+    Play.
 
 cycle(Xs) ->
-    dummy.
+    length(Xs) rem 3.
 
 rand(_) ->
-    dummy.
+    random:uniform(3) rem 3.
